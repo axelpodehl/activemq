@@ -26,11 +26,16 @@ public class PropertiesLoader {
     private static final Logger LOG = LoggerFactory.getLogger(PropertiesLoader.class);
     static Map<FileNameKey, ReloadableProperties> staticCache = new HashMap<FileNameKey, ReloadableProperties>();
     protected boolean debug;
-
+    protected boolean decrypt;
+    
     public void init(Map options) {
         debug = booleanOption("debug", options);
         if (debug) {
             LOG.debug("Initialized debug");
+        }
+        decrypt = booleanOption("decrypt", options);
+        if (decrypt) {
+            LOG.debug("Initialized decrypt");
         }
     }
 
@@ -38,6 +43,7 @@ public class PropertiesLoader {
         ReloadableProperties result;
         FileNameKey key = new FileNameKey(nameProperty, fallbackName, options);
         key.setDebug(debug);
+        key.setDecrypt(decrypt);
 
         synchronized (staticCache) {
             result = staticCache.get(key);
